@@ -26,6 +26,11 @@ serverIcon=ImageTk.PhotoImage(resized)
 folderIcon = Image.open('/usr/share/pixmaps/smbbrowse/folderIcon.png')
 resized=folderIcon.resize((iconSize, iconSize), Image.ANTIALIAS)
 folderIcon=ImageTk.PhotoImage(resized)
+result = subprocess.run(['xdg-mime', 'query', 'default', 'inode/directory'], stdout=subprocess.PIPE)
+output=result.stdout.decode('utf-8')
+print (output)
+fileManager=output[0:output.find('.')]
+print (fileManager)
 result = subprocess.run(['nmblookup', '-S', 'WORKGROUP'], stdout=subprocess.PIPE)
 output=result.stdout.decode('utf-8')
 server=''
@@ -61,7 +66,7 @@ def doubleClicked(event):
     selected=tree.focus()
     if '/' in selected:
         buttonText.set('Mount share smb://'+selected)
-        result = subprocess.run(['xdg-open', 'smb://'+selected])
+        result = subprocess.run([fileManager, 'smb://'+selected])
 def getShares(server):
     cmd='smbclient -N -L '+server+' | grep Disk'
     result=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
@@ -79,7 +84,7 @@ def getShares(server):
     root.update_idletasks()
 def mountShare():
     if buttonText.get()!="No share selected":
-        result = subprocess.run(['xdg-open', buttonText.get()[12:len(buttonText.get())]])
+        result = subprocess.run([fileManager, buttonText.get()[12:len(buttonText.get())]])
 def refresh():
     os.execl(sys.executable, sys.executable, *sys.argv)
 def showAbout():
