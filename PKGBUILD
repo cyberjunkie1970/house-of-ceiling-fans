@@ -14,8 +14,9 @@ md5sums=('SKIP')
  
 package() {
     cd "$pkgname"
-    install -Dm644 SMBbrowse.py "$pkgdir/usr/bin"
-    install -Dm644 *.png "$pkgdir/usr/share/pixmaps/$pkgname"
-    install -Dm644 SMBbrowse.desktop "$pkgdir/usr/share/applications"
+    install -Dm755 SMBbrowse.py "$pkgdir/usr/bin/SMBbrowse.py"
+    install -Dm644 serverIcon.png "$pkgdir/usr/share/pixmaps/$pkgname/serverIcon.png"
+    install -Dm644 folderIcon.png "$pkgdir/usr/share/pixmaps/$pkgname/folderIcon.png"
+    install -Dm644 SMBbrowse.desktop "$pkgdir/usr/share/applications/SMBbrowse.desktop"
     install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
