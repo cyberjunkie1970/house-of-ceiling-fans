@@ -8,6 +8,7 @@ arch=(any)
 url="https://github.com/cyberjunkie1970/smbbrowse"
 license=('MIT')
 depends=('smbclient' 'gvfs-smb' 'python' 'python-pillow' 'tk' 'xdg-utils')
+makedepends=('git')
 provides=('SMBbrowse.py')
 source=("git+https://github.com/cyberjunkie1970/${pkgname}.git")
 md5sums=('SKIP')
