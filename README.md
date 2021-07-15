@@ -8,6 +8,7 @@ To mount a share in your default file manager, you can double click on the share
 * Dependencies:
 	* smbclient
 	* xdg-utils
+	* tk
 	* python
 	* python-pillow
 	* gvfs-smb
