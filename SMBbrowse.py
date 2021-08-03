@@ -57,7 +57,7 @@ def shareSelected(event):
     else:
         if not tree.get_children(selected):
             server=selected
-            tree.configure(cursor='circle')
+            tree.configure(cursor='watch')
             root.update_idletasks()
             getShares(server)
             tree.item(server, open=True)
