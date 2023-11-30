@@ -9,10 +9,40 @@ import tkinter.font as tkf
 from tkinter.ttk import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
+from pathlib import Path
 
 root=Tk()
 root.geometry("600x500")
 root.title("Samba Share Browser")
+workgroupfile=str(Path.home())+"/.smbworkgroup"
+Path(workgroupfile).touch()
+file=open(workgroupfile, "r")
+workgroup=file.readline()
+file.close
+if workgroup=="":
+    workgroup="WORKGROUP"
+def refresh():
+    os.execl(sys.executable, sys.executable, *sys.argv)
+def saveNewGroup(newworkgroup, popup):
+    file=open(workgroupfile, "w")
+    file.write(newworkgroup)
+    file.close()
+    popup.destroy()
+    refresh()
+def changeWorkgroup():
+    popup=Tk()
+    popup.geometry("300x100")
+    popup.title("Change Workgroup")
+    newworkgroup=StringVar(popup)
+    newgrouptext=Label(popup, text="\nPlease enter the new workgroup name:\n")
+    newgrouptext.pack()
+    newgroupfield=Entry(popup, width=15, textvariable=newworkgroup)
+    newgroupfield.pack()
+    newgroupbutton=Button(popup, text="Apply", command= lambda: saveNewGroup(newworkgroup.get(), popup))
+    newgroupbutton.pack(side=BOTTOM)
+    newgroupfield.focus()
+changegroup=ttk.Button(text='Workgroup: '+workgroup, command=changeWorkgroup)
+changegroup.pack(side=TOP)
 tree=ttk.Treeview(root, height=20, selectmode='browse')
 tree.pack(side=TOP, fill=BOTH, expand=1)
 scrollbar = Scrollbar(tree)
@@ -31,7 +61,7 @@ output=result.stdout.decode('utf-8')
 print (output)
 fileManager=output[0:output.find('.')]
 print (fileManager)
-result = subprocess.run(['nmblookup', '-S', 'WORKGROUP'], stdout=subprocess.PIPE)
+result = subprocess.run(['nmblookup', '-S', workgroup], stdout=subprocess.PIPE)
 output=result.stdout.decode('utf-8')
 server=''
 servers=[]
@@ -85,8 +115,6 @@ def getShares(server):
 def mountShare():
     if buttonText.get()!="No share selected":
         result = subprocess.run([fileManager, buttonText.get()[12:len(buttonText.get())]])
-def refresh():
-    os.execl(sys.executable, sys.executable, *sys.argv)
 def showAbout():
     messagebox.showinfo("About", "SMB Browser 1.0\nCopyright 2021 Gary Streck\nLicense: MIT")
 root.update_idletasks()
